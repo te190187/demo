@@ -37,6 +37,12 @@ jobs:
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots package
 
+      - name: Archive Production Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: out
+          path: out
+
       - name: Notify Build
         uses: 8398a7/action-slack@v3.8.0
         with:
@@ -47,12 +53,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_INCOMING_WEBHOOK_URL }}
         if: always()
-
-      - name: Archive Production Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: out
-          path: out
 
   deploy:
     needs: [build]
@@ -138,3 +138,14 @@ jobs:
               echo "${APP_NAME} app start!!"
               sudo systemctl start ${APP_NAME}
             fi
+
+      - name: Notify Build
+        uses: 8398a7/action-slack@v3.8.0
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,job,took,eventName,ref,workflow
+          author_name: デプロイ結果
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_INCOMING_WEBHOOK_URL }}
+        if: always()
