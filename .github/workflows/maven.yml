@@ -42,7 +42,7 @@ jobs:
         with:
           status: ${{ job.status }}
           fields: repo,message,commit,author,action,job,took,eventName,ref,workflow
-          text: ビルド結果
+          author_name: ビルド結果
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_INCOMING_WEBHOOK_URL }}
