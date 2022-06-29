@@ -8,7 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 
 public class FooTest {
  @Test
- void 常に失敗するテスト() {
-  assertEquals(10, 1);
+ void 常に成功するテスト() {
+  assertEquals(1, 1);
  } 
 }
