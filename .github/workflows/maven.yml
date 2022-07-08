@@ -97,6 +97,7 @@ jobs:
               echo "JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")" | sudo tee -a   /etc/profile
               source /etc/profile
             fi
+            echo "===== check mariadb-service install ====="
             echo "===== check conf file ====="
             if [ -f ${DEST_DIR}/${APP_NAME}/${APP_NAME}.conf ]; then
             echo "already exist conf file for $APP_NAME"
