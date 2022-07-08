@@ -21,7 +21,7 @@ public class DemoApplication {
 	@GetMapping()
 	public String index() {
 		Info info = new Info();
-		info.setMessage("from spring-boot");
+		info.setMessage("にほんごがただしくひょうじ・保存できるか？");
 		infoRepository.save(info);
 		return "にほんごがただしくひょうじ・保存できるか？";
 	}
