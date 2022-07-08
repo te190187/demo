@@ -23,7 +23,7 @@ public class DemoApplication {
 		Info info = new Info();
 		info.setMessage("from spring-boot");
 		infoRepository.save(info);
-		return "Hello";
+		return "にほんごがただしくひょうじ・保存できるか？";
 	}
 	
 
