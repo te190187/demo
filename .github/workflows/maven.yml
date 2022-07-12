@@ -84,7 +84,7 @@ jobs:
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           username: ${{ env.EC2_USER }}
           host: ${{ env.EC2_HOST }}
-          envs: DEST_DIR,JAVA_VERSION,APP_NAME,JAVA_OPTS,RUN_ARGS
+          envs: DEST_DIR,JAVA_VERSION,APP_NAME,JAVA_OPTS,RUN_ARGS,INIT_SQL
           script: |
             echo "===== yum update ====="
             sudo yum update -y
