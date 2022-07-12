@@ -14,6 +14,7 @@ env:
   EC2_HOST: "50.16.184.35"
   SRC_PATH: "out/*.jar"
   DEST_DIR: "/var/apps"
+  INIT_SQL: "database/init.sql"
 
   APP_NAME: "demo"
   JAVA_VERSION: "11"
@@ -86,6 +87,7 @@ jobs:
           script: |
             echo "===== yum update ====="
             sudo yum update -y
+
             echo "===== check java install ====="
             if java -version 2>&1 >/dev/null | grep "java version\|openjdk version" ; then
               echo "already installed java."
@@ -97,7 +99,15 @@ jobs:
               echo "JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")" | sudo tee -a   /etc/profile
               source /etc/profile
             fi
-            echo "===== check mariadb-service install ====="
+
+            echo "===== check mariadb-server install ====="
+            if mysql --version 2>/dev/null | grep "MariaDB"; then
+              echo "already installed mariadb-server"
+            else
+              echo "install mariadb-server"
+              sudo yum install -y mariadb-server
+            fi
+
             echo "===== check conf file ====="
             if [ -f ${DEST_DIR}/${APP_NAME}/${APP_NAME}.conf ]; then
             echo "already exist conf file for $APP_NAME"
@@ -109,6 +119,7 @@ jobs:
             RUN_ARGS="$RUN_ARGS"
             EOL
             fi
+
             echo "===== check exist service file ====="
             if [ -f /etc/systemd/system/${APP_NAME}.service ]; then
             echo "already exist service file for $APP_NAME"
@@ -130,6 +141,7 @@ jobs:
             WantedBy = multi-user.target
             EOL
             fi
+
             echo "===== application (re)start ====="
             sudo systemctl daemon-reload
             if sudo systemctl status ${APP_NAME} 2>&1 | grep "Active: active (running)" ; then
@@ -138,6 +150,19 @@ jobs:
             else
               echo "${APP_NAME} app start!!"
               sudo systemctl start ${APP_NAME}
+            fi
+
+            echo "==== mariadb (re)start ===="
+            if sudo systemctl status mariadb 2>$1 | grep "Active: active (running)" ; then
+              echo "mariadb restart!!"
+              sudo systemctl restart mariadb
+            else
+              echo "mariadb start!!"
+              sudo systemctl start mariadb
+              sudo systemctl enable mariadb
+
+              echo "===== seeding mariadb ===="
+              mysql --user=root --password= < ${INIT_SQL}
             fi
 
       - name: Notify Build
