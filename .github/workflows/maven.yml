@@ -162,7 +162,7 @@ jobs:
               sudo systemctl enable mariadb
 
               echo "===== seeding mariadb ===="
-              mysql --user=root --password= < ${INIT_SQL}
+              mysql --user=root --password= < "${INIT_SQL}"
             fi
 
       - name: Notify Build
