@@ -76,6 +76,7 @@ jobs:
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -t -o StrictHostKeyChecking=no -i private_key ${EC2_USER}@${EC2_HOST} "sudo mkdir -p $DEST_DIR/$APP_NAME && sudo chmod -R 777 $DEST_DIR/$APP_NAME"
           scp -i private_key ${SRC_PATH} ${EC2_USER}@${EC2_HOST}:${DEST_DIR}/${APP_NAME}/${APP_NAME}.jar
+          scp -i private_key ${INIT_SQL} ${EC2_USER}@${EC2_HOST}:${DEST_DIR}/${APP_NAME}/${INIT_SQL}
 
       - name: SSH EC2 Setup and Deploy
         uses: appleboy/ssh-action@v0.0.9
@@ -162,7 +163,7 @@ jobs:
               sudo systemctl enable mariadb
 
               echo "===== seeding mariadb ===="
-              mysql --user=root --password= < "${INIT_SQL}"
+              mysql --user=root --password= < ${DEST_DIR}/${APP_NAME}/${INIT_SQL}
             fi
 
       - name: Notify Build
