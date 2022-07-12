@@ -13,5 +13,5 @@ create table info(
 drop table if exists added;
 create table added(
         id int not null auto_increment,
-        m varchar(100) not null,
+        m varchar(100) not null
 );
