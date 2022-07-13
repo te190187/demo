@@ -101,13 +101,12 @@ jobs:
               source /etc/profile
             fi
 
-            echo "===== check mariadb-server install ====="
-            if yum list installed 2>/dev/null | grep mariadb-server; then
-              echo "already installed mariadb-server"
+            echo "===== check mariadb install ====="
+            if mariadb -V  2>&1 | grep "command not found"; then
+              echo "install mariadb"
+              sudo amazon-linux-extras install mariadb10.5
             else
-              echo "install mariadb-server"
-              curl -sS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | sudo bash
-              sudo yum install -y mariadb-server
+              echo "already installed mariadb"
             fi
 
             echo "===== check conf file ====="
