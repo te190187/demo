@@ -102,10 +102,11 @@ jobs:
             fi
 
             echo "===== check mariadb-server install ====="
-            if mysql --version 2>/dev/null | grep "MariaDB"; then
+            if yum list installed 2>/dev/null | grep mariadb-server; then
               echo "already installed mariadb-server"
             else
               echo "install mariadb-server"
+              curl -sS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | sudo bash
               sudo yum install -y mariadb-server
             fi
 
