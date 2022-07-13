@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import javax.annotation.sql.DataSourceDefinition;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
